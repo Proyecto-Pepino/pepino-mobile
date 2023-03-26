@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import Count from "./components/count";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -57,7 +60,9 @@ export default function App() {
       ) : (
         <Text style={styles.text}>{userInfo.name}</Text>
       )}
-      <View style={styles.viewCount}><Count></Count></View>
+
+      <View style={styles.viewCount}>
+        <Provider store={store}><Count></Count></Provider></View>
     </View>
   );
 }

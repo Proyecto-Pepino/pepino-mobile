@@ -1,19 +1,41 @@
 import { StyleSheet, Text, View,  TextInput ,TouchableOpacity} from "react-native";
-import store from "../redux/store";
+
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, reset  } from "../redux/createSlice";
+
 
 const Count = () => {
+  const count = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
+ 
+  const handlePressReset = () =>{
+    dispatch(reset())
+  }
+  const handlePressAdd = () => {
+    console.log("Adding...");
+    dispatch(increment());
+
+  };
+  
+  const handlePressSubstract = () => {
+    console.log("Substracting...");
+    dispatch(decrement());
+
+  };
+
+
   return (
     <View>
       <View style={styles.viewTop}>
-        <TextInput style={styles.textInput} value={store.getState().count}></TextInput>
-        <TouchableOpacity style={styles.buttonToCero}><Text style={styles.textToCero} >VOLVER A CERO</Text>
+      <Text style={styles.textInput}>{count}</Text>
+        <TouchableOpacity onPress={handlePressReset} style={styles.buttonToCero}><Text style={styles.textToCero} >VOLVER A CERO</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.viewBotom}>
-      <TouchableOpacity style={styles.buttonToCero}><Text style={styles.textToCero} >SUMAR</Text>
+      <TouchableOpacity onPress={handlePressAdd} style={styles.buttonToCero}><Text style={styles.textToCero} >SUMAR</Text>
       </TouchableOpacity>
         <View style={styles.viewBetween}></View>
-        <TouchableOpacity onPress={()=>console.log(store.getState().count)} style={styles.buttonToCero}><Text style={styles.textToCero} >RESTAR</Text>
+        <TouchableOpacity onPress={handlePressSubstract} style={styles.buttonToCero}><Text style={styles.textToCero} >RESTAR</Text>
       </TouchableOpacity>
       </View>
     </View>
@@ -46,7 +68,7 @@ const styles = StyleSheet.create({
     width:'41%',
     margin:5,
     textAlign:'center',
-   
+   height:30
   },
   buttonToCero: {
     height: 40,
