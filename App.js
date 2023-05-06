@@ -1,84 +1,40 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import Count from "./components/count";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Login from "./components/login";
+import SearchPage from "./components/search-page";
+import Home from "./components/home";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import  store  from './redux/reducers/index';
 
 
-WebBrowser.maybeCompleteAuthSession();
+const Stack = createStackNavigator();
 
 export default function App() {
-  const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId:"566934023458-gtif6v6bhtpl5r9pig39nu0u54ncfc13.apps.googleusercontent.com",
-    androidClientId: "566934023458-64p34b1jlis3euaunir6sqgm6qpjbr9r.apps.googleusercontent.com",
-    iosClientId: "566934023458-ic2hhru1oghhcksnvvka9i9nbm1h6dj0.apps.googleusercontent.com",
-  });
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
-      console.log(response);
-      
-    }
-  }, [response, token]);
-
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      const user = await response.json();
-      setUserInfo(user);
-      console.log(user.email);
-      console.log(user);
-
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
   return (
-    <View style={styles.container}>
-      {userInfo === null ? (
-        <Button
-          title="Sign in with Google"
-          disabled={!request}
-          onPress={() => {
-            promptAsync();
-          }}
-        />
-      ) : (
-        <Text style={styles.text}>{userInfo.name}</Text>
-      )}
-
-      <View style={styles.viewCount}>
-        <Provider store={store}><Count></Count></Provider></View>
-    </View>
+    <Provider store={store}>
+      
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }} /*evita que se renderize el nombre */
+          />
+          <Stack.Screen
+            name="Search"
+            component={SearchPage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  viewCount:{
-    width:'100%'
-  }
-});
