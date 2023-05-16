@@ -6,6 +6,7 @@ import SearchPage from "./components/search-page";
 import Home from "./components/home";
 import { Provider } from "react-redux";
 import  store  from './redux/reducers/index';
+import Product from "./components/product";
 
 
 const Stack = createStackNavigator();
@@ -31,6 +32,11 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Product"
+            component={Product}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

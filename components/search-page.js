@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Text, TextInput } from "react-native";
+import { View, StyleSheet, ScrollView, Text, TextInput, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -56,7 +56,7 @@ const TabNavigator = () => (
         tabBarIndicatorStyle: { backgroundColor: "black" },
       }}
     >
-      <Tab.Screen name="Pestaña 1" component={Screen1} />
+      <Tab.Screen name="Frutas y Verduras" component={Screen1} />
       <Tab.Screen name="Pestaña 2" component={Screen2} />
       <Tab.Screen name="Pestaña 3" component={Screen3} />
     </Tab.Navigator>
@@ -65,6 +65,12 @@ const TabNavigator = () => (
 
 function Screen1() {
   const productos = useSelector((state) => state.product);
+  const navigation = useNavigation();
+  const showProduct = (productData) => {
+
+    navigation.navigate('Product', { productData });
+   
+  }
   return (
     <ScrollView style={{ flexGrow: 1 }}>
       <View
@@ -76,19 +82,24 @@ function Screen1() {
           padding: 20,
           backgroundColor: "#ffffff",
         }}
+        
       >
-        {productos.fruits.map((key) => (
-          <View style={stylesSearchPage.productArray}>
+        {productos.fruits.map((productData) => (
+          <TouchableOpacity style={stylesSearchPage.productArray} onPress={() => showProduct(productData)}>
             <View
               style={{
                 height: 63,
                 alignItems: "flex-end",
-                padding:10
+                padding: 10,
               }}
-            >
               
+            >
               <View
-                style={{ borderWidth: 1, borderColor: "black", borderRadius: 50 }}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "black",
+                  borderRadius: 50,
+                }}
               >
                 <Ionicons name="add" size={40} />
               </View>
@@ -102,12 +113,15 @@ function Screen1() {
               }}
             >
               <View>
-                <Text>{key.name}</Text>
-                <Text>{key.price}</Text>
-                <Text style={{fontWeight:'450', fontSize:10}}>Precio por kg</Text>
+                <Text>{productData.price}</Text>
+                <Text>{productData.name}</Text>
+
+                <Text style={{ fontWeight: "450", fontSize: 10 }}>
+                  Precio por kg
+                </Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>
@@ -137,9 +151,7 @@ const SearchPage = () => {
   const navigation = useNavigation();
   const productos = useSelector((state) => state.product);
 
-  productos.fruits.forEach((fruit) => {
-    console.log(fruit.name, fruit.price);
-  });
+  ;
 
   return (
     <>
@@ -193,7 +205,7 @@ const stylesSearchPage = StyleSheet.create({
   container: {
     flex: 1,
 
-    marginTop: "30%",
+    marginTop: "20%",
     marginLeft: "10%",
   },
 

@@ -1,17 +1,17 @@
 import React from "react";
-import {  Text, StyleSheet ,TouchableOpacity} from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
+const MerchandiseGroup = ({ title }) => {
+  const navigation = useNavigation();
 
-
-const MerchandiseGroup = ({title}) => {
-
-  
-    const navigation = useNavigation();
-    
-  
   return (
-    <TouchableOpacity style={styles.containerMerch} onPress={() => navigation.navigate('Search')}>
+    <TouchableOpacity
+      style={styles.containerMerch}
+      onPress={() => 
+        navigation.navigate("Search")
+      }
+    >
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
