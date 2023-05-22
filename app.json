@@ -15,8 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "package": "com.auth.mobilestore"
+      "supportsTablet": true
+      
     },
     "android": {
       "adaptiveIcon": {
